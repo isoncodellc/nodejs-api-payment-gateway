@@ -4,48 +4,42 @@ const stripe = new Stripe(STRIPE_PRIVATE_KEY);
 
 export const charges = async (req, res) => {
 
+    let { card_number, expiry_month, expiry_year, cvc, amount, currency_code } = req.body;
+
 	try 
 	{
 		const paymentMethod = await stripe.paymentMethods.create({
 			type: "card",
 			card: {
-				number: "4242424242424249",
-				exp_month: 11,
-				exp_year: 2024,
-				cvc: "123",
+				number: card_number,
+				exp_month: expiry_month,
+				exp_year: expiry_year,
+				cvc: cvc
 			},
 		});
 
+        amount = amount * 100;
+
 		const paymentIntent = await stripe.paymentIntents.create({
 			payment_method: paymentMethod.id,
-			amount: 1000,
-			currency: "USD",
+			amount: amount,
+			currency: currency_code,
 			confirm: true,
 			payment_method_types: ["card"]
 		});
 
-		res.send(paymentIntent);
+        const result = {
+            charge_id: paymentIntent.id,
+            status: paymentIntent.status,
+            receipt_url: paymentIntent.charges.data[0].receipt_url
+        }
+
+        console.log(paymentIntent);
+		res.send(result);
         
-	} catch (error) {
-		res.json({errorMessage: `${error.message}`});
+	} catch (err) {
+        res.json({errorMessage: `${err.message}`});
+        console.log("error ::", err);
 	}
 
-};
-
-export const refund = async (req, res) => {
-
-	const { chargeId } = req.body;
-
-	try 
-	{
-		const refund = await stripe.refunds.create({
-			charge: chargeId
-		});
-    
-		res.send(refund);
-        
-	} catch (error) {
-		res.json({errorMessage: `${error.message}`});
-	}
-	
 };
