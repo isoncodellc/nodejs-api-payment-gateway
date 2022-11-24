@@ -2,7 +2,18 @@ import Stripe from "stripe";
 import { STRIPE_PRIVATE_KEY } from "../config.js";
 const stripe = new Stripe(STRIPE_PRIVATE_KEY);
 
-export const charges = async (req, res) => {
+const setCustomError = (err) => {
+    if (["StripeCardError","StripeInvalidRequestError"].includes(err.type)){
+        err.status = err.status || err.statusCode;
+        if (err.param) {
+            err.status = 400;
+            err.message = `The parameter ${err.param} is invalid or missing`;
+        } 
+        err.code = err.raw.code || "stripe_error";
+    }
+}
+
+export const charges = async (req, res, next) => {
 
     let { card_number, expiry_month, expiry_year, cvc, amount, currency_code } = req.body;
 
@@ -38,8 +49,8 @@ export const charges = async (req, res) => {
 		res.send(result);
         
 	} catch (err) {
-        res.json({errorMessage: `${err.message}`});
-        console.log("error ::", err);
-	}
+        setCustomError(err);
+        next(err);
+    }
 
 };

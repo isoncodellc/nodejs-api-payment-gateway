@@ -5,3 +5,7 @@ app.listen(PORT);
 
 console.log("Server running on port", PORT);
 console.log("Enviroment", NODE_ENV);
+
+if (NODE_ENV === "production") {
+    console.log = function () {};
+}
