@@ -3,19 +3,19 @@ import { STRIPE_PRIVATE_KEY } from "../config.js";
 const stripe = new Stripe(STRIPE_PRIVATE_KEY);
 
 const setCustomError = (err) => {
-    if (["StripeCardError","StripeInvalidRequestError"].includes(err.type)){
-        err.status = err.status || err.statusCode;
-        if (err.param) {
-            err.status = 400;
-            err.message = `The parameter ${err.param} is invalid or missing`;
-        } 
-        err.code = err.raw.code || "stripe_error";
-    }
-}
+	if (["StripeCardError","StripeInvalidRequestError"].includes(err.type)){
+		err.status = err.status || err.statusCode;
+		if (err.param) {
+			err.status = 400;
+			err.message = `The parameter ${err.param} is invalid or missing`;
+		} 
+		err.code = err.raw.code || "stripe_error";
+	}
+};
 
 export const charges = async (req, res, next) => {
 
-    let { card_number, expiry_month, expiry_year, cvc, amount, currency_code } = req.body;
+	let { card_number, expiry_month, expiry_year, cvc, amount, currency_code } = req.body;
 
 	try 
 	{
@@ -29,7 +29,7 @@ export const charges = async (req, res, next) => {
 			},
 		});
 
-        amount = amount * 100;
+		amount = amount * 100;
 
 		const paymentIntent = await stripe.paymentIntents.create({
 			payment_method: paymentMethod.id,
@@ -39,18 +39,18 @@ export const charges = async (req, res, next) => {
 			payment_method_types: ["card"]
 		});
 
-        const result = {
-            charge_id: paymentIntent.id,
-            status: paymentIntent.status,
-            receipt_url: paymentIntent.charges.data[0].receipt_url
-        }
+		const result = {
+			charge_id: paymentIntent.id,
+			status: paymentIntent.status,
+			receipt_url: paymentIntent.charges.data[0].receipt_url
+		};
 
-        console.log(paymentIntent);
+		console.log(paymentIntent);
 		res.send(result);
         
 	} catch (err) {
-        setCustomError(err);
-        next(err);
-    }
+		setCustomError(err);
+		next(err);
+	}
 
 };
