@@ -15,10 +15,14 @@ const setCustomError = (err) => {
 
 export const charges = async (req, res, next) => {
 
-	let { card_number, expiry_month, expiry_year, cvc, amount, currency_code } = req.body;
+	let { card_number, expiry_month, expiry_year, cvc, amount, currency_code, customer_email, description, metadata } = req.body;
 
 	try 
 	{
+        const customer = await stripe.customers.create({
+            email: customer_email
+        }); 
+
 		const paymentMethod = await stripe.paymentMethods.create({
 			type: "card",
 			card: {
@@ -36,7 +40,10 @@ export const charges = async (req, res, next) => {
 			amount: amount,
 			currency: currency_code,
 			confirm: true,
-			payment_method_types: ["card"]
+			payment_method_types: ["card"],
+            customer: customer.id,
+            description: description,
+            metadata: metadata
 		});
 
 		const result = {
