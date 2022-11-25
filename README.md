@@ -1,2 +1,2 @@
 # nodejs-api-payment-gateway
-API to integrate payments with Stripe
+API to integrate payments with Stripe and Conekta
