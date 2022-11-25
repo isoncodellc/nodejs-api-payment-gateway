@@ -53,7 +53,7 @@ export const charges = async (req, res, next) => {
 		};
 
 		console.log(paymentIntent);
-		res.send(result);
+		res.status(201).json(result);
         
 	} catch (err) {
 		setCustomError(err);

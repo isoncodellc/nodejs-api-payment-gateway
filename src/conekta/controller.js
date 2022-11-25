@@ -16,7 +16,6 @@ export const createOrder = async (req, res, next) => {
 		});
 
 		customer = customer.toObject();
-
         amount = amount * 100;
 
 		const orderCreated = await conekta.Order.create({
@@ -47,7 +46,7 @@ export const createOrder = async (req, res, next) => {
 			redirect_url: orderCreated._json.checkout.url
 		};
 
-		res.json(result);
+		res.status(201).json(result);
 
 	} catch (error) {
         next(err);
