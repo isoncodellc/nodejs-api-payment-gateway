@@ -48,7 +48,7 @@ export const createOrder = async (req, res, next) => {
 
 		res.status(201).json(result);
 
-	} catch (error) {
+	} catch (err) {
         next(err);
 	}
 
