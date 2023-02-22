@@ -6,7 +6,7 @@ conekta.api_version = "2.0.0";
 
 export const createOrder = async (req, res, next) => {
 
-    let { customer_name, customer_email, reference, amount, currency, success_url, failure_url } = req.body;
+	let { customer_name, customer_email, reference, amount, currency, success_url, failure_url } = req.body;
 
 	try 
 	{
@@ -16,7 +16,7 @@ export const createOrder = async (req, res, next) => {
 		});
 
 		customer = customer.toObject();
-        amount = amount * 100;
+		amount = amount * 100;
 
 		const orderCreated = await conekta.Order.create({
 			"currency": currency,
@@ -38,7 +38,7 @@ export const createOrder = async (req, res, next) => {
 			}
 		});
 
-        console.log("orderCreated ::", orderCreated._json);
+		console.log("orderCreated ::", orderCreated._json);
 
 		const result = {
 			checkout_id: orderCreated._json.checkout.id,
@@ -49,7 +49,7 @@ export const createOrder = async (req, res, next) => {
 		res.status(201).json(result);
 
 	} catch (error) {
-        next(err);
+		next(error);
 	}
 
 };
