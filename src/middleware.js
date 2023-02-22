@@ -5,11 +5,11 @@ export const error404handler = (req, res, next) =>{
 };
 
 export const errorGenericHandler = (err, req, res, next) => {
-	console.log(err);
+	console.log("err", err);
 	const errCode = err.code || "general";
 	const errStatus = err.status || 500;
 
-	res.status(errStatus).json({
+	return res.status(errStatus).json({
 		status: errStatus,
 		code: errCode,
 		message: err.message,

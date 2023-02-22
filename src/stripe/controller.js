@@ -19,9 +19,9 @@ export const charges = async (req, res, next) => {
 
 	try 
 	{
-        const customer = await stripe.customers.create({
-            email: customer_email
-        }); 
+		const customer = await stripe.customers.create({
+			email: customer_email
+		}); 
 
 		const paymentMethod = await stripe.paymentMethods.create({
 			type: "card",
@@ -41,9 +41,9 @@ export const charges = async (req, res, next) => {
 			currency: currency_code,
 			confirm: true,
 			payment_method_types: ["card"],
-            customer: customer.id,
-            description: description,
-            metadata: metadata
+			customer: customer.id,
+			description: description,
+			metadata: metadata
 		});
 
 		const result = {
