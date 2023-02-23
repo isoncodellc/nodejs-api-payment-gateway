@@ -48,13 +48,8 @@ export const createOrder = async (req, res, next) => {
 
 		res.status(201).json(result);
 
-<<<<<<< HEAD
 	} catch (error) {
 		next(error);
-=======
-	} catch (err) {
-        next(err);
->>>>>>> 5f0a1b16ca61aeb0184dc5ea9b513ae01ce83b3b
 	}
 
 };
