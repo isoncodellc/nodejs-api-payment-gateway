@@ -49,10 +49,10 @@ export const charges = async (req, res, next) => {
 		const result = {
 			charge_id: paymentIntent.id,
 			status: paymentIntent.status,
-			receipt_url: paymentIntent.charges.data[0].receipt_url
+			receipt_url: paymentIntent.charges?.data[0]?.receipt_url
 		};
 
-		console.log(paymentIntent);
+		console.log(JSON.stringify(paymentIntent, null, 4));
 		res.status(201).json(result);
         
 	} catch (err) {
