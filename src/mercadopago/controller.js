@@ -18,11 +18,7 @@ export const createOrder = async (req, res, next) => {
 			transaction_amount: req.body.transactionAmount,
 			payment_method_id: req.body.paymentMethodId,
 			payer: {
-				email: req.body.payer.email,
-				identification: {
-					type: req.body.payer.identification.type,
-					number: req.body.payer.identification.number
-				}
+				email: req.body.payer.email
 			}
 		};
 
